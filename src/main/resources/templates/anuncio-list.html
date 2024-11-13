@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titulo}"></title>
+    <style rel="stylesheet">
+        header{
+            padding: 20px;
+            border-bottom: 1px solid gray;
+            position: relative;
+        }
+        header form, header div{
+            display: block;
+            position: absolute;
+            top: 40px;
+            right: 5px;
+
+        }
+        main{
+            padding: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+<!--<header><h2>ANUNCIOS</h2>
+    <th:block sec:authorize="isAnonymous()">
+        <form th:action="@{/login}" method="post">
+            <span th:if="${param.errorLogin}">Usuario o contraseña no válidos.</span><br>
+            <input type="text" name="username" placeholder="Username"/>
+            <input type="password" name="password" placeholder="Password"/>
+            <input type="submit" value="Log in" />
+        </form>
+    </th:block>
+    <th:block sec:authorize="isAuthenticated()">
+        <div>Bienvenido <span sec:authentication="name"></span>
+            <a href="#" id="logoutEnlace" onclick="document.getElementById('formLogOut').submit()">Cerrar Sesión</a>
+            <form th:action="@{/logout}" method="post" id="formLogOut"></form> </div>
+    </th:block>
+</header>-->
+<main>
+    <!--<select name="categoria" id="categoria" onchange="location.href = '/productos/categoria/'+this.value">
+        <option value="-1">Todas las categorias</option>
+        <option th:each="categoria : ${categorias}"
+                th:value="${categoria.id}"
+                th:text="${categoria.nombre}"
+                th:selected="${categoria.id == selectedCategoriaId}">
+        </option>
+    </select>-->
+
+    <div id="anuncios">
+        <p th:if="${#lists.isEmpty(anuncios)}">No hay anuncios.</p>
+        <ul>
+            <li th:each="anuncio: ${anuncios}">
+               <!--th:href="@{'/productos/view/' + ${producto.id}}"-->
+                <a th:text="${anuncio.titulo}"></a>
+                <a th:text="${anuncio.precio}"></a>
+                <!--<span th:if="${producto.categoria != null}" th:text="'['+${producto.categoria.nombre}+']'"></span>-->
+                <!--<a th:href="@{/productos/del/{id}(id=${producto.id})}">borrar</a> -->
+                <!-- Queremos cargar una ruta del tipo: /getProductos/del/3 -->
+               <!-- <a th:href="@{/productos/edit/{id}(id=${producto.id})}">editar</a>-->
+                <div class="foto-container">
+                    <div th:each="foto : ${anuncio.fotos}"
+                         class="foto"
+                         th:style="'background-image: url(/imagesAnuncios/' + ${foto.nombre} + ');'">
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <a th:href="@{/productos/new}">Insertar producto</a>
+</main>
+</body>
+</html>
