@@ -19,5 +19,6 @@ public class FotoAnuncio {
     private String nombre;
 
     @ManyToOne(targetEntity = Anuncio.class)
+    @JoinColumn(name = "anuncio_id")
     private Anuncio anuncio;
 }

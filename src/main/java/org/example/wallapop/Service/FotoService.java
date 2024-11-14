@@ -1,7 +1,9 @@
 package org.example.wallapop.Service;
 
-import org.example.Entity.Anuncio;
-import org.example.Entity.FotoAnuncio;
+
+
+import org.example.wallapop.Entity.Anuncio;
+import org.example.wallapop.Entity.FotoAnuncio;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,7 +1,9 @@
 package org.example.wallapop.Service;
 
-import org.example.Entity.Anuncio;
-import org.example.repository.AnuncioRepository;
+
+
+import org.example.wallapop.Entity.Anuncio;
+import org.example.wallapop.repository.AnuncioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

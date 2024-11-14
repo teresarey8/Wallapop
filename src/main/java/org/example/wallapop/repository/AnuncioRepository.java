@@ -1,6 +1,6 @@
 package org.example.wallapop.repository;
 
-import org.example.Entity.Anuncio;
+import org.example.wallapop.Entity.Anuncio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

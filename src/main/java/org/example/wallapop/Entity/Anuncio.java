@@ -37,7 +37,7 @@ public class Anuncio {
     private LocalDate fechaCreacion;
     private String Foto;
 
-    @OneToMany(targetEntity = FotoAnuncio.class, cascade = CascadeType.ALL, mappedBy = "Anuncio")
+    @OneToMany(targetEntity = FotoAnuncio.class, cascade = CascadeType.ALL, mappedBy = "anuncio")
     private List<FotoAnuncio> fotos = new ArrayList<>();
 
 }
