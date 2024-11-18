@@ -3,6 +3,7 @@ package org.example.wallapop.Controller;
 import jakarta.validation.Valid;
 import org.example.wallapop.Entity.Anuncio;
 import org.example.wallapop.Service.AnuncioService;
+import org.example.wallapop.Service.FotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +19,12 @@ import java.util.List;
 public class AnuncioController {
 
     private final AnuncioService anuncioService;
+    private final FotoService fotoService;
 
     @Autowired
-    public AnuncioController(AnuncioService anuncioService) {
+    public AnuncioController(AnuncioService anuncioService, FotoService fotoService) {
         this.anuncioService = anuncioService;
+        this.fotoService = fotoService;
     }
 
     @GetMapping("/")
@@ -48,15 +51,15 @@ public class AnuncioController {
 
         //Guardar fotos
         try {
-            fotoProductoService.guardarFotos(fotos, producto);
+            fotoService.guardarFotos(fotos, anuncio);
         }catch (IllegalArgumentException ex) {
-            model.addAttribute("categorias", productoService.findAllCategoriasSorted());
+            //model.addAttribute("categorias", productoService.findAllCategoriasSorted());
             model.addAttribute("mensaje", ex.getMessage());
             return "anuncio-new";
         }
 
         //Guardar producto
-        productoService.saveProducto(producto);
+        anuncioService.saveAnuncio(anuncio);
         return "redirect:/productos";
     }
 }

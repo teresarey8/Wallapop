@@ -24,4 +24,9 @@ public class AnuncioService {
     public List<Anuncio> obtenerTodosAnuncios() {
         return anuncioRepository.findAllByOrderByFechaCreacionDesc();
     }
+
+    public void saveAnuncio(Anuncio anuncio) {
+        anuncioRepository.save(anuncio);
+    }
+
 }
