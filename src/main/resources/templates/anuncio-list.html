@@ -56,22 +56,22 @@
         <ul>
             <li th:each="anuncio: ${anuncios}">
                <!--th:href="@{'/productos/view/' + ${producto.id}}"-->
-                <a th:text="${anuncio.titulo}" ></a> <br>
+                <a th:text="${anuncio.titulo}" th:href="'/anuncios/ver/' + ${anuncio.id}"></a> <br>
                 <a th:text="${anuncio.precio} + '€' "></a>
                 <!--<span th:if="${producto.categoria != null}" th:text="'['+${producto.categoria.nombre}+']'"></span>-->
                 <!--<a th:href="@{/productos/del/{id}(id=${producto.id})}">borrar</a> -->
                 <!-- Queremos cargar una ruta del tipo: /getProductos/del/3 -->
                <!-- <a th:href="@{/productos/edit/{id}(id=${producto.id})}">editar</a>-->
                 <div class="foto-container">
-                    <div th:each="${anuncio.fotos}"
-                         class="foto"
-                         th:style="'background-image: url(/imagesAnuncios/' + ${foto.nombre} + ');'">
+                    <div th:each="foto : ${anuncio.fotos}" class="foto"
+                         th:style="'background-image: url(/imagesAnuncios/' + anuncio.foto + ');'">
                     </div>
                 </div>
+
             </li>
         </ul>
     </div>
-    <!--<a th:href="@{/productos/new}">Insertar producto</a>-->
+    <p>Total de artículos: <span th:text="${totalAnuncios}"></span></p>
 </main>
 </body>
 </html>

@@ -7,7 +7,10 @@ import org.example.wallapop.repository.AnuncioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AnuncioService {
@@ -27,6 +30,15 @@ public class AnuncioService {
 
     public void saveAnuncio(Anuncio anuncio) {
         anuncioRepository.save(anuncio);
+        anuncio.setFechaCreacion(LocalDate.now());
     }
+    public Optional<Anuncio> findAnuncioById(Long id) {
+        return anuncioRepository.findById(id);
+    }
+
+    public void deleteAnuncioById(Long id) {
+        anuncioRepository.deleteById(id);
+    }
+
 
 }

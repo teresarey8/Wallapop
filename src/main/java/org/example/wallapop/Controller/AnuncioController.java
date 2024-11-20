@@ -9,11 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class AnuncioController {
@@ -29,13 +31,15 @@ public class AnuncioController {
 
     @GetMapping("/")
     public String findAll(Model model) {
-        model.addAttribute("anuncios", anuncioService.obtenerTodosAnuncios());
+        List<Anuncio> anuncios = anuncioService.obtenerTodosAnuncios();
+        model.addAttribute("anuncios",anuncios);
         // Retornar el nombre de la vista a la que se enviarán los datos
+        model.addAttribute("totalAnuncios", anuncios.size());
         return "anuncio-list";
     }
     @GetMapping("/anuncios/new")
     public String newAnuncio(Model model) {
-        model.addAttribute("producto", new Anuncio());
+        model.addAttribute("anuncio", new Anuncio());
         //model.addAttribute("categorias", productoService.findAllCategorias());
         return "anuncio-new";
     }
@@ -57,9 +61,21 @@ public class AnuncioController {
             model.addAttribute("mensaje", ex.getMessage());
             return "anuncio-new";
         }
-
-        //Guardar producto
         anuncioService.saveAnuncio(anuncio);
-        return "redirect:/productos";
+        return "redirect:/";
+    }
+    @GetMapping("/anuncios/ver/{id}")
+    public String verAnuncio(@PathVariable Long id, Model model) {
+        Optional<Anuncio> anuncio = anuncioService.findAnuncioById(id);
+        if (anuncio.isPresent()) {
+            model.addAttribute("anuncio", anuncio.get());
+            return "anuncio-ver";
+        }
+        return "redirect:/";
+    }
+    @GetMapping("/anuncios/del/{id}")
+    public String delete(@PathVariable Long id) {
+        anuncioService.deleteAnuncioById(id);
+        return "redirect:/";
     }
 }

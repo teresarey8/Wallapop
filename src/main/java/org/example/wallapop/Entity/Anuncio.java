@@ -3,6 +3,8 @@ package org.example.wallapop.Entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,8 +28,9 @@ public class Anuncio {
     @NotEmpty(message = "El titulo del anuncio no puede estar en blanco")
     @Column(length = 200)
     private String titulo;
-    @NotEmpty(message = "El precio no puede estar en blanco")
-    @Min(value = 0, message = "El precio tiene que ser positivo")
+    @NotNull
+    //para que sea positivo, y el precio no puede tener notempty ese es para string
+    @Positive
     private Double precio;
     //la descripcion puede tener maximo 500 caracteres
     @Column(length = 500)
