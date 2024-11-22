@@ -42,7 +42,9 @@ public class Anuncio {
 
     @OneToMany(targetEntity = FotoAnuncio.class, cascade = CascadeType.ALL, mappedBy = "anuncio")
     private List<FotoAnuncio> fotos = new ArrayList<>();
-
+    @ManyToOne
+    @JoinColumn(name = "usuario", nullable = false) // Nombre de la columna en la base de datos
+    private Usuario usuario;
 }
 
 

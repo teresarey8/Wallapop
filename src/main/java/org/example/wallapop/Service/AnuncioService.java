@@ -3,7 +3,9 @@ package org.example.wallapop.Service;
 
 
 import org.example.wallapop.Entity.Anuncio;
+import org.example.wallapop.Entity.Usuario;
 import org.example.wallapop.repository.AnuncioRepository;
+import org.example.wallapop.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class AnuncioService {
 
     private final AnuncioRepository anuncioRepository;
+
 
     // Constructor
     @Autowired
@@ -40,5 +43,8 @@ public class AnuncioService {
         anuncioRepository.deleteById(id);
     }
 
+    public List<Anuncio> obtenerAnunciosPorUsuario(Usuario usuario) {
+        return anuncioRepository.findByUsuario(usuario);
+    }
 
 }

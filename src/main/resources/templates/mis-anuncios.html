@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Mis Anuncios</title>
+</head>
+<body>
+<h1>Mis Anuncios</h1>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>Título</th>
+    <th>Descripción</th>
+    <th>Precio</th>
+    <th>Acciones</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="anuncio : ${anuncios}">
+    <td th:text="${anuncio.titulo}"></td>
+    <td th:text="${anuncio.descripcion}"></td>
+    <td th:text="${anuncio.precio}"></td>
+    <td>
+      <a th:href="@{'/anuncios/edit/' + ${anuncio.id}}">Editar</a> |
+      <a th:href="@{'/anuncios/del/' + ${anuncio.id}}" onclick="return confirm('¿Seguro que quieres borrar este anuncio?')">Borrar</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
