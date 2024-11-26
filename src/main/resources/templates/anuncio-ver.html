@@ -16,8 +16,8 @@
 <div th:if="${fotos != null && !fotos.isEmpty()}">
   <div class="foto-container">
     <div th:each="foto : ${fotos}"
-         class="foto"
-         th:style="'background-image: url(/imagesAnuncios/' + ${foto.nombre} + ');'">
+         class="foto">
+      <img th:src="@{'/imagesAnuncios/' + ${foto.nombre}}">
     </div>
   </div>
 </div>
