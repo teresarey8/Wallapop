@@ -5,10 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,13 +35,23 @@ public class Anuncio {
     @Lob
     private String descripcion;
     private LocalDate fechaCreacion;
-    private String Foto;
 
-    @OneToMany(targetEntity = FotoAnuncio.class, cascade = CascadeType.ALL, mappedBy = "anuncio")
+    @OneToMany(targetEntity = FotoAnuncio.class, cascade = CascadeType.ALL, mappedBy = "anuncio", orphanRemoval = true)
+    @ToString.Exclude
     private List<FotoAnuncio> fotos = new ArrayList<>();
-    @ManyToOne
+
+    /*@ManyToOne
     @JoinColumn(name = "usuario", nullable = false) // Nombre de la columna en la base de datos
-    private Usuario usuario;
+    private Usuario usuario;*/
+    public FotoAnuncio getPrimeraFoto(){
+        FotoAnuncio fotoAnuncio = new FotoAnuncio();
+        fotoAnuncio.setNombre("/default.png");
+        if(!fotos.isEmpty()){
+            return  fotos.get(0);
+        }else{
+            return fotoAnuncio;
+        }
+    }
 }
 
 

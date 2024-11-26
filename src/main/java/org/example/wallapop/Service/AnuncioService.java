@@ -3,14 +3,11 @@ package org.example.wallapop.Service;
 
 
 import org.example.wallapop.Entity.Anuncio;
-import org.example.wallapop.Entity.Usuario;
 import org.example.wallapop.repository.AnuncioRepository;
-import org.example.wallapop.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +29,12 @@ public class AnuncioService {
     }
 
     public void saveAnuncio(Anuncio anuncio) {
+        if (anuncio.getFechaCreacion() == null) {
+            anuncio.setFechaCreacion(LocalDate.now());
+        }
         anuncioRepository.save(anuncio);
-        anuncio.setFechaCreacion(LocalDate.now());
     }
+
     public Optional<Anuncio> findAnuncioById(Long id) {
         return anuncioRepository.findById(id);
     }
@@ -43,8 +43,8 @@ public class AnuncioService {
         anuncioRepository.deleteById(id);
     }
 
-    public List<Anuncio> obtenerAnunciosPorUsuario(Usuario usuario) {
+    /*public List<Anuncio> obtenerAnunciosPorUsuario(Usuario usuario) {
         return anuncioRepository.findByUsuario(usuario);
-    }
+    }*/
 
 }

@@ -26,7 +26,7 @@
 
 <body>
 <header><h2>ANUNCIOS</h2>
-    <th:block sec:authorize="isAnonymous()">
+   <!-- <th:block sec:authorize="isAnonymous()">
         <form th:action="@{/login}" method="post">
             <span th:if="${param.errorLogin}">Usuario o contraseña no válidos.</span><br>
             <input type="text" name="username" placeholder="Username"/>
@@ -38,7 +38,7 @@
         <div>Bienvenido <span sec:authentication="name"></span>
             <a href="#" id="logoutEnlace" onclick="document.getElementById('formLogOut').submit()">Cerrar Sesión</a>
             <form th:action="@{/logout}" method="post" id="formLogOut"></form> </div>
-    </th:block>
+    </th:block>-->
 </header>
 <main>
     <!--<select name="categoria" id="categoria" onchange="location.href = '/productos/categoria/'+this.value">
@@ -55,20 +55,12 @@
         <h1>Lista de anuncios</h1>
         <ul>
             <li th:each="anuncio: ${anuncios}">
-               <!--th:href="@{'/productos/view/' + ${producto.id}}"-->
+                <img th:src="@{'imagesAnuncios/' + ${anuncio.getPrimeraFoto().getNombre()}}" class="w-50 mt-5 rounded-4">
                 <a th:text="${anuncio.titulo}" th:href="'/anuncios/ver/' + ${anuncio.id}"></a> <br>
-                <a th:text="${anuncio.precio} + '€' "></a>
-                <!--<span th:if="${producto.categoria != null}" th:text="'['+${producto.categoria.nombre}+']'"></span>-->
-                <!--<a th:href="@{/productos/del/{id}(id=${producto.id})}">borrar</a> -->
-                <!-- Queremos cargar una ruta del tipo: /getProductos/del/3 -->
-               <!-- <a th:href="@{/productos/edit/{id}(id=${producto.id})}">editar</a>-->
-                <div class="foto-container">
-                    <div th:each="foto : ${anuncio.fotos}" class="foto"
-                         th:style="'background-image: url(/imagesAnuncios/' + anuncio.foto + ');'">
-                    </div>
-                </div>
-
+                <a th:text="${anuncio.precio} + '€'"></a>
+                <a th:text="${anuncio.fechaCreacion}"></a>
             </li>
+
         </ul>
     </div>
     <p>Total de artículos: <span th:text="${totalAnuncios}"></span></p>

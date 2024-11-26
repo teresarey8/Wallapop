@@ -11,16 +11,22 @@
 <h2 th:text="${anuncio.titulo}"></h2>
 <p>Descripcion: <span th:text="${anuncio.descripcion}"></span><br>
   Precio: <span th:text="${anuncio.precio}"></span><br>
-  <br>
 
-<div class="foto-container">
-  <div th:each="foto : ${anuncio.fotos}"
-       class="foto"
-       th:style="'background-image: url(/imagesAnuncios/' + ${foto.nombre} + ');'">
+  <!-- Mostrar fotos asociadas -->
+<div th:if="${fotos != null && !fotos.isEmpty()}">
+  <div class="foto-container">
+    <div th:each="foto : ${fotos}"
+         class="foto"
+         th:style="'background-image: url(/imagesAnuncios/' + ${foto.nombre} + ');'">
+    </div>
   </div>
 </div>
-<br>
+<!-- hay fotos pq no me sale el error pero no me las muestra-->
+<p th:if="${fotos == null || fotos.isEmpty()}">No hay fotos para este anuncio.</p>
+
 <a th:href="@{/}">Volver al listado</a>
+
+
 
 </body>
 </html>

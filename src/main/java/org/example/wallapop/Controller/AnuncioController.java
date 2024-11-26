@@ -2,13 +2,10 @@ package org.example.wallapop.Controller;
 
 import jakarta.validation.Valid;
 import org.example.wallapop.Entity.Anuncio;
-import org.example.wallapop.Entity.Usuario;
 import org.example.wallapop.Service.AnuncioService;
 import org.example.wallapop.Service.FotoService;
 import org.example.wallapop.repository.AnuncioRepository;
-import org.example.wallapop.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,14 +23,12 @@ public class AnuncioController {
 
     private final AnuncioService anuncioService;
     private final FotoService fotoService;
-    private final UsuarioRepository usuarioRepository;
     private final AnuncioRepository anuncioRepository;
 
     @Autowired
-    public AnuncioController(AnuncioService anuncioService, FotoService fotoService, UsuarioRepository usuarioRepository, AnuncioRepository anuncioRepository) {
+    public AnuncioController(AnuncioService anuncioService, FotoService fotoService, AnuncioRepository anuncioRepository) {
         this.anuncioService = anuncioService;
         this.fotoService = fotoService;
-        this.usuarioRepository = usuarioRepository;
         this.anuncioRepository = anuncioRepository;
     }
 
@@ -78,8 +72,10 @@ public class AnuncioController {
         Optional<Anuncio> anuncio = anuncioService.findAnuncioById(id);
         if (anuncio.isPresent()) {
             model.addAttribute("anuncio", anuncio.get());
+            model.addAttribute("fotos", anuncio.get().getFotos());
             return "anuncio-ver";
         }
+        model.addAttribute("mensaje", "El anuncio no existe.");
         return "redirect:/";
     }
     @GetMapping("/anuncios/del/{id}")
@@ -87,7 +83,7 @@ public class AnuncioController {
         anuncioService.deleteAnuncioById(id);
         return "redirect:/";
     }
-    @GetMapping("/mis-anuncios")
+   /* @GetMapping("/mis-anuncios")
     public String misAnuncios(Model model, Authentication auth) {
         // Obtener usuario conectado
         Usuario usuario = usuarioRepository.findByEmail(auth.getName())
@@ -111,6 +107,6 @@ public class AnuncioController {
         anuncioRepository.delete(anuncio);
         redirect.addFlashAttribute("success", "Anuncio borrado con éxito");
         return "redirect:/mis-anuncios";
-    }
+    }*/
 
 }
