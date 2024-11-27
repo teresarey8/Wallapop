@@ -1,108 +1,49 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title th:text="${titulo}"></title>
-    <style rel="stylesheet">
-        header{
-            padding: 20px;
-            border-bottom: 1px solid gray;
-            position: relative;
-        }
-        header form, header div{
-            display: block;
-            position: absolute;
-            top: 40px;
-            right: 5px;
-        }
-        main{
-            padding: 20px;
-        }
-
-        /* Estilo para las imágenes */
-        #anuncios img {
-            width: 300px;                /* Ocupa el 100% del ancho disponible del contenedor */
-            height: 300px;              /* Altura fija para todas las imágenes */
-            object-fit: cover;          /* Asegura que las imágenes mantengan su relación de aspecto y se recorten si es necesario */
-            border-radius: 8px;         /* Bordes redondeados para las imágenes */
-        }
-
-        /* Estilo adicional para la lista de anuncios */
-        #anuncios li {
-            margin-bottom: 30px;
-        }
-
-        /* Títulos y enlaces de los anuncios */
-        #anuncios a {
-            text-decoration: none;      /* Eliminar subrayado */
-            color: #333;                /* Color de texto */
-            font-size: 18px;
-            display: block;             /* Para que el enlace ocupe todo el espacio y sea más fácil de hacer clic */
-            margin-top: 5px;
-        }
-
-        /* Titulo de los anuncios */
-        #anuncios h3 {
-            font-size: 22px;
-            color: #000;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
 </head>
-
 <body>
-<div th:replace="~{menu}"></div>
-<header><h2>ANUNCIOS</h2></header>
-
+<div th:replace="~{header}"></div>
 <main>
+    <div class="container">
+        <h1 class="my-4">Lista de anuncios</h1>
 
-    <div id="anuncios">
-        <p th:if="${#lists.isEmpty(anuncios)}">No hay anuncios.</p>
-        <h1>Lista de anuncios</h1>
         <form th:action="@{/}" method="get">
-            <label for="categoriaId">Filtrar por categoría:</label>
-            <select id="categoriaId" name="categoriaId" th:value="${param.categoriaId}">
-                <option value="">Seleccione una categoría</option>
-                <th:block th:each="categoria : ${categorias}">
-                    <option th:value="${categoria.id}" th:text="${categoria.nombre}"></option>
-                </th:block>
-            </select>
-            <button type="submit">Filtrar</button>
+            <div class="mb-3">
+                <label for="categoriaId" class="form-label">Filtrar por categoría:</label>
+                <select id="categoriaId" name="categoriaId" class="form-select" th:value="${param.categoriaId}">
+                    <option value="">Seleccione una categoría</option>
+                    <th:block th:each="categoria : ${categorias}">
+                        <option th:value="${categoria.id}" th:text="${categoria.nombre}"></option>
+                    </th:block>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
         </form>
 
-        <ul>
-            <li th:each="anuncio: ${anuncios}">
-                <!-- Imagen del anuncio con tamaño consistente -->
-                <img th:src="@{'/imagesAnuncios/' + ${anuncio.getPrimeraFoto().getNombre()}}" class="w-50 mt-5 rounded-4">
+        <div id="anuncios">
+            <p th:if="${#lists.isEmpty(anuncios)}">No hay anuncios.</p>
+            <div class="row">
+                <div class="col-md-4" th:each="anuncio : ${anuncios}">
+                    <div class="card my-3">
+                        <img th:src="@{'/imagesAnuncios/' + ${anuncio.getPrimeraFoto().getNombre()}}" class="card-img-top" alt="Imagen del anuncio">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${anuncio.titulo}"></h5>
+                            <p class="card-text" th:text="${anuncio.precio} + '€'"></p>
+                            <a th:href="'/anuncios/ver/' + ${anuncio.id}" class="btn btn-primary">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                <!-- Título del anuncio con enlace a su detalle -->
-                <h3><a th:text="${anuncio.titulo}" th:href="'/anuncios/ver/' + ${anuncio.id}"></a></h3>
-
-                <!-- Precio del anuncio -->
-                <p th:text="${anuncio.precio} + '€'"></p>
-
-                <!-- Fecha de creación del anuncio -->
-                <p th:text="${anuncio.fechaCreacion}"></p>
-            </li>
-        </ul>
+        <p>Total de artículos: <span th:text="${totalAnuncios}"></span></p>
     </div>
-    <p>Total de artículos: <span th:text="${totalAnuncios}"></span></p>
 </main>
-<script th:inline="javascript">
-    document.getElementById("categoriaId").addEventListener("change", function () {
-        const form = document.getElementById("categoriaFilter");
-        const url = form.action + "?categoriaId=" + form.categoriaId.value;
-        fetch(url, {
-            method: "GET"
-        })
-            .then(response => response.text())
-            .then(html => {
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-                const newContent = tempDiv.querySelector("#anuncios-list");
-                document.getElementById("anuncios-list").innerHTML = newContent.innerHTML;
-            });
-    });
-</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
