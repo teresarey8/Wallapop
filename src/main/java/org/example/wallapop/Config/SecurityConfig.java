@@ -20,8 +20,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/registro", "/imagesAnuncios/**").permitAll() // Rutas públicas
-                        .requestMatchers("/anuncios/**").authenticated() // Solo usuarios autenticados pueden editar
+                        .requestMatchers("/login", "/logout", "/registro", "/imagesAnuncios/**").permitAll() // Rutas públicas
+                        .requestMatchers("/anuncios/editar/**").authenticated() // Solo usuarios autenticados pueden editar
                         .anyRequest().authenticated() // Otras rutas requerirán autenticación
                 )
                 .formLogin(login -> login
@@ -30,7 +30,10 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/") // Redirige a la página principal al cerrar sesión
+                        .logoutUrl("/logout") // URL para cerrar sesión
+                        .logoutSuccessUrl("/login") // URL a la que redirige después de cerrar sesión
+                        .invalidateHttpSession(true) // Invalida la sesión
+                        .clearAuthentication(true) // Borra la autenticación
                         .permitAll()
                 )
                 .rememberMe(rememberMe -> rememberMe
