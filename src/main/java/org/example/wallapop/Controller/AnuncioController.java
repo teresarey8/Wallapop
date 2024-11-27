@@ -2,11 +2,14 @@ package org.example.wallapop.Controller;
 
 import jakarta.validation.Valid;
 import org.example.wallapop.Entity.Anuncio;
+import org.example.wallapop.Entity.Categoria;
 import org.example.wallapop.Entity.Usuario;
 import org.example.wallapop.Service.AnuncioService;
+import org.example.wallapop.Service.CategoriaService;
 import org.example.wallapop.Service.FotoService;
 import org.example.wallapop.Service.UsuarioService;
 import org.example.wallapop.repository.AnuncioRepository;
+import org.example.wallapop.repository.CategoriaRepository;
 import org.example.wallapop.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,35 +33,50 @@ public class AnuncioController {
     private final AnuncioRepository anuncioRepository;
     private final UsuarioRepository usuarioRepository;
     private final UsuarioService usuarioService;
+    private final CategoriaRepository categoriaRepository;
+    private final CategoriaService categoriaService;
 
     @Autowired
-    public AnuncioController(AnuncioService anuncioService, FotoService fotoService, AnuncioRepository anuncioRepository, UsuarioRepository usuarioRepository, UsuarioService usuarioService) {
+    public AnuncioController(AnuncioService anuncioService, FotoService fotoService, AnuncioRepository anuncioRepository, UsuarioRepository usuarioRepository, UsuarioService usuarioService, CategoriaRepository categoriaRepository, CategoriaService categoriaService) {
         this.anuncioService = anuncioService;
         this.fotoService = fotoService;
         this.anuncioRepository = anuncioRepository;
         this.usuarioRepository = usuarioRepository;
         this.usuarioService = usuarioService;
+        this.categoriaRepository = categoriaRepository;
+        this.categoriaService = categoriaService;
     }
 
+
     @GetMapping("/")
-    public String findAll(Model model) {
-        List<Anuncio> anuncios = anuncioService.obtenerTodosAnuncios();
-        model.addAttribute("anuncios",anuncios);
-        // Retornar el nombre de la vista a la que se enviarán los datos
+    public String findAll(@RequestParam(required = false) Long categoriaId, Model model) {
+        List<Anuncio> anuncios;
+        if (categoriaId != null && categoriaId > 0) {
+            anuncios = anuncioService.obtenerAnunciosPorCategoria(categoriaId);
+        } else {
+            anuncios = anuncioService.obtenerTodosAnuncios();
+        }
+
+        model.addAttribute("anuncios", anuncios);
+        model.addAttribute("categorias", categoriaService.findAll());
         model.addAttribute("totalAnuncios", anuncios.size());
         return "anuncio-list";
     }
+
+
+
     @GetMapping("/anuncios/new")
     public String newAnuncio(Model model) {
         model.addAttribute("anuncio", new Anuncio());
-        //model.addAttribute("categorias", productoService.findAllCategorias());
+        model.addAttribute("categorias", categoriaRepository.findAll()); // Añadimos las categorías
         return "anuncio-new";
     }
 
     @PostMapping("/anuncios/new")
     public String newAnuncioInsert(Model model, @Valid Anuncio anuncio,
                                    BindingResult bindingResult,
-                                   @RequestParam(value = "archivosFotos", required = false) List<MultipartFile> fotos) {
+                                   @RequestParam(value = "archivosFotos", required = false) List<MultipartFile> fotos,
+                                   @RequestParam(value = "categorias", required = false) List<Long> categoriasIds) {
         if (bindingResult.hasErrors()) {
             return "anuncio-new"; // Devuelve el formulario con los errores
         }
@@ -71,7 +90,10 @@ public class AnuncioController {
 
             // Asignar el usuario al anuncio
             anuncio.setUsuario(usuario);
-
+            if (categoriasIds != null && !categoriasIds.isEmpty()) {
+                List<Categoria> categorias = categoriaRepository.findAllById(categoriasIds);
+                anuncio.setCategorias(new HashSet<>(categorias)); // Convertimos la lista en un Set
+            }
             // Guardar las fotos asociadas al anuncio
             fotoService.guardarFotos(fotos, anuncio);
 
@@ -117,10 +139,13 @@ public class AnuncioController {
             throw new RuntimeException("No puedes editar este anuncio");
         }
         model.addAttribute("anuncio", anuncio);
+        model.addAttribute("categorias", categoriaRepository.findAll()); // Añadir las categorías
         return "editar-anuncio"; // Vista para editar el anuncio
     }
     @PostMapping("/anuncios/editar/{id}")
-    public String editarAnuncio(@PathVariable Long id, @ModelAttribute Anuncio anuncioForm, RedirectAttributes redirectAttributes) {
+    public String editarAnuncio(@PathVariable Long id, @ModelAttribute Anuncio anuncioForm,
+                                @RequestParam(value = "categorias", required = false) List<Long> categoriasIds,
+                                RedirectAttributes redirectAttributes) {
         // Obtiene el email del usuario autenticado
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -129,6 +154,7 @@ public class AnuncioController {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         try {
+
             // Llama al servicio de anuncio para editar el anuncio
             anuncioService.editarAnuncio(id, anuncioForm, usuario);
 
@@ -143,9 +169,6 @@ public class AnuncioController {
         return "redirect:/";
     }
 
-
-
-
     @GetMapping("/anuncios/borrar/{id}")
     public String borrarAnuncio(@PathVariable Long id) {
         Anuncio anuncio = anuncioService.findAnuncioById(id).orElseThrow(() -> new RuntimeException("Anuncio no encontrado"));
@@ -155,5 +178,6 @@ public class AnuncioController {
         anuncioService.deleteAnuncioById(id);
         return "redirect:/mis-anuncios";  // Redirige a Mis anuncios después de eliminar
     }
+
 
 }

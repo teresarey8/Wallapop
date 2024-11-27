@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,5 +85,11 @@ public class AnuncioService {
         // Guarda los cambios
         anuncioRepository.save(anuncioExistente);
     }
+    public List<Anuncio> obtenerAnunciosPorCategoria(Long categoriaId) {
+        return new ArrayList<>(anuncioRepository.findByCategoriasId(categoriaId)); // Convierte Set a List
+    }
+
+
+
 
 }

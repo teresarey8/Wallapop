@@ -17,14 +17,12 @@
     <br>
     <input type="number" min="0" step="0.01" placeholder="Precio..." id="precio" name="precio" th:field="*{precio}" >
     <span th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></span><br>
-    <!--<select id="categoria" name="categoria" th:field="*{categoria}">
-        <option value="">Selecciona una categoria</option>
-        <option th:each="categoria : ${categorias}" th:text="${categoria.nombre}" th:value="${categoria.id}"></option>
+    <label for="categorias">Categorías</label>
+    <select id="categorias" name="categorias" multiple>
+        <option th:each="categoria : ${categorias}"
+                th:value="${categoria.id}"
+                th:text="${categoria.nombre}"></option>
     </select>
-    <span th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}"></span>
-    <br>-->
-    <!--<input type="file" name="archivosFotos" multiple ><br>-->
-
     <div class="contenedorFotosProductosInsert" >
         <div class="fotoProductoInsert" onclick="triggerFileInput(this)">
             <input type="file" name="archivosFotos" class="file-input" accept="image/jpeg, image/png, image/gif, image/webp, image/avif" onchange="previewImage(this)">

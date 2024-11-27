@@ -12,7 +12,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 
 @Configuration
 public class SecurityConfig {
-
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
@@ -24,6 +27,7 @@ public class SecurityConfig {
                         .requestMatchers("/anuncios/editar/**").authenticated() // Solo usuarios autenticados pueden editar
                         .anyRequest().authenticated() // Otras rutas requerirán autenticación
                 )
+
                 .formLogin(login -> login
                         .loginPage("/login") // Página de login
                         .defaultSuccessUrl("/") // Redirige a la página principal al iniciar sesión
@@ -33,19 +37,18 @@ public class SecurityConfig {
                         .logoutUrl("/logout") // URL para cerrar sesión
                         .logoutSuccessUrl("/login") // URL a la que redirige después de cerrar sesión
                         .invalidateHttpSession(true) // Invalida la sesión
-                        .clearAuthentication(true) // Borra la autenticación
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
                 .rememberMe(rememberMe -> rememberMe
+                        .key("uniqueAndSecret")
                         .tokenValiditySeconds(5 * 24 * 60 * 60) // 5 días
+                        .userDetailsService(customUserDetailsService)
                 );
         return http.build();
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {

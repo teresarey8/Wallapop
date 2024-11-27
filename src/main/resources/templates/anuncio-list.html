@@ -55,9 +55,21 @@
 <header><h2>ANUNCIOS</h2></header>
 
 <main>
+
     <div id="anuncios">
         <p th:if="${#lists.isEmpty(anuncios)}">No hay anuncios.</p>
         <h1>Lista de anuncios</h1>
+        <form th:action="@{/}" method="get">
+            <label for="categoriaId">Filtrar por categoría:</label>
+            <select id="categoriaId" name="categoriaId" th:value="${param.categoriaId}">
+                <option value="">Seleccione una categoría</option>
+                <th:block th:each="categoria : ${categorias}">
+                    <option th:value="${categoria.id}" th:text="${categoria.nombre}"></option>
+                </th:block>
+            </select>
+            <button type="submit">Filtrar</button>
+        </form>
+
         <ul>
             <li th:each="anuncio: ${anuncios}">
                 <!-- Imagen del anuncio con tamaño consistente -->
@@ -76,6 +88,21 @@
     </div>
     <p>Total de artículos: <span th:text="${totalAnuncios}"></span></p>
 </main>
-
+<script th:inline="javascript">
+    document.getElementById("categoriaId").addEventListener("change", function () {
+        const form = document.getElementById("categoriaFilter");
+        const url = form.action + "?categoriaId=" + form.categoriaId.value;
+        fetch(url, {
+            method: "GET"
+        })
+            .then(response => response.text())
+            .then(html => {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const newContent = tempDiv.querySelector("#anuncios-list");
+                document.getElementById("anuncios-list").innerHTML = newContent.innerHTML;
+            });
+    });
+</script>
 </body>
 </html>

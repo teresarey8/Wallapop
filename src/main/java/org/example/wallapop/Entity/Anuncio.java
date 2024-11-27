@@ -10,6 +10,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -53,6 +54,13 @@ public class Anuncio {
             return fotoAnuncio;
         }
     }
+    @ManyToMany
+    @JoinTable(
+            name = "anuncio_categoria",
+            joinColumns = @JoinColumn(name = "anuncio_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    private Set<Categoria> categorias;
 }
 
 
