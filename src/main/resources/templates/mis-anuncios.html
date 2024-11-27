@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Anuncios</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  <h1>Mis Anuncios</h1>
+  <div class="row">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-4" th:each="anuncio : ${misAnuncios}">
+          <div class="card">
+            <img th:src="@{'/imagesAnuncios/' + ${anuncio.getPrimeraFoto().getNombre()}}" class="card-img-top" alt="Imagen del anuncio">
+            <div class="card-body">
+              <h5 class="card-title" th:text="${anuncio.titulo}"></h5>
+              <p class="card-text" th:text="'€ ' + ${anuncio.precio}"></p>
+              <a th:href="@{/anuncios/ver/{id}(id=${anuncio.id})}" class="btn btn-primary">Ver más</a>
+              <a th:href="@{/anuncios/editar/{id}(id=${anuncio.id})}" class="btn btn-warning">Editar</a>
+              <a th:href="@{/anuncios/borrar/{id}(id=${anuncio.id})}" class="btn btn-danger">Borrar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

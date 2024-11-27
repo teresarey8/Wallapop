@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Anuncio</title>
+</head>
+<body>
+<h1>Editar Anuncio</h1>
+<form action="/anuncios/editar/${anuncio.id}" method="post">
+  <input type="hidden" th:value="${anuncio.id}" name="id"/>
+  <label for="titulo">Título:</label>
+  <input type="text" id="titulo" name="titulo" th:value="${anuncio.titulo}" required/>
+
+  <label for="descripcion">Descripción:</label>
+  <textarea id="descripcion" name="descripcion" required th:text="${anuncio.descripcion}"></textarea>
+
+  <label for="precio">Precio:</label>
+  <input type="number" id="precio" name="precio" th:value="${anuncio.precio}" required/>
+
+  <label for="imagen">Imagen:</label>
+  <input type="file" id="imagen" name="imagen"/>
+
+  <button type="submit">Guardar cambios</button>
+</form>
+<a th:href="@{/anuncios}">Cancelar</a>
+
+<a th:href="@{/anuncios}">Cancelar</a>
+</body>
+</html>

@@ -40,9 +40,10 @@ public class Anuncio {
     @ToString.Exclude
     private List<FotoAnuncio> fotos = new ArrayList<>();
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "usuario", nullable = false) // Nombre de la columna en la base de datos
-    private Usuario usuario;*/
+    private Usuario usuario;
+
     public FotoAnuncio getPrimeraFoto(){
         FotoAnuncio fotoAnuncio = new FotoAnuncio();
         fotoAnuncio.setNombre("/default.png");

@@ -3,10 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <title></title>
-  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+  <style>
+    /* Estilo para las imágenes */
+    .foto-container {
+      display: flex;               /* Usamos flexbox para alinear las imágenes horizontalmente */
+      gap: 10px;                   /* Espacio entre las imágenes */
+      flex-wrap: wrap;             /* Permite que las imágenes se ajusten en varias filas si es necesario */
+    }
+
+    .foto {
+      width: 100%;                 /* La imagen ocupa el 100% del ancho disponible */
+      max-width: 300px;            /* Establecemos un tamaño máximo para las imágenes */
+      height: 200px;               /* Altura fija para todas las imágenes */
+      overflow: hidden;            /* Evita que las imágenes se salgan del contenedor */
+      border-radius: 8px;          /* Bordes redondeados para un estilo más suave */
+      display: flex;               /* Centra la imagen en el contenedor */
+      justify-content: center;
+      align-items: center;
+    }
+
+    .foto img {
+      width: 100%;                 /* Hace que la imagen ocupe todo el contenedor */
+      height: 100%;                /* Hace que la imagen se ajuste a la altura del contenedor */
+      object-fit: cover;           /* Mantiene la relación de aspecto y recorta si es necesario */
+    }
+  </style>
 </head>
 <body>
-
 
 <h2 th:text="${anuncio.titulo}"></h2>
 <p>Descripcion: <span th:text="${anuncio.descripcion}"></span><br>
@@ -15,18 +38,15 @@
   <!-- Mostrar fotos asociadas -->
 <div th:if="${fotos != null && !fotos.isEmpty()}">
   <div class="foto-container">
-    <div th:each="foto : ${fotos}"
-         class="foto">
-      <img th:src="@{'/imagesAnuncios/' + ${foto.nombre}}">
+    <div th:each="foto : ${fotos}" class="foto">
+      <img th:src="@{'/imagesAnuncios/' + ${foto.nombre}}" alt="Foto del anuncio">
     </div>
   </div>
 </div>
-<!-- hay fotos pq no me sale el error pero no me las muestra-->
+
 <p th:if="${fotos == null || fotos.isEmpty()}">No hay fotos para este anuncio.</p>
 
 <a th:href="@{/}">Volver al listado</a>
-
-
 
 </body>
 </html>

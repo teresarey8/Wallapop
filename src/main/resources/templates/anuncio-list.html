@@ -15,55 +15,67 @@
             position: absolute;
             top: 40px;
             right: 5px;
-
         }
         main{
             padding: 20px;
         }
 
+        /* Estilo para las imágenes */
+        #anuncios img {
+            width: 300px;                /* Ocupa el 100% del ancho disponible del contenedor */
+            height: 300px;              /* Altura fija para todas las imágenes */
+            object-fit: cover;          /* Asegura que las imágenes mantengan su relación de aspecto y se recorten si es necesario */
+            border-radius: 8px;         /* Bordes redondeados para las imágenes */
+        }
+
+        /* Estilo adicional para la lista de anuncios */
+        #anuncios li {
+            margin-bottom: 30px;
+        }
+
+        /* Títulos y enlaces de los anuncios */
+        #anuncios a {
+            text-decoration: none;      /* Eliminar subrayado */
+            color: #333;                /* Color de texto */
+            font-size: 18px;
+            display: block;             /* Para que el enlace ocupe todo el espacio y sea más fácil de hacer clic */
+            margin-top: 5px;
+        }
+
+        /* Titulo de los anuncios */
+        #anuncios h3 {
+            font-size: 22px;
+            color: #000;
+        }
     </style>
 </head>
 
 <body>
-<header><h2>ANUNCIOS</h2>
-   <!-- <th:block sec:authorize="isAnonymous()">
-        <form th:action="@{/login}" method="post">
-            <span th:if="${param.errorLogin}">Usuario o contraseña no válidos.</span><br>
-            <input type="text" name="username" placeholder="Username"/>
-            <input type="password" name="password" placeholder="Password"/>
-            <input type="submit" value="Log in" />
-        </form>
-    </th:block>
-    <th:block sec:authorize="isAuthenticated()">
-        <div>Bienvenido <span sec:authentication="name"></span>
-            <a href="#" id="logoutEnlace" onclick="document.getElementById('formLogOut').submit()">Cerrar Sesión</a>
-            <form th:action="@{/logout}" method="post" id="formLogOut"></form> </div>
-    </th:block>-->
-</header>
-<main>
-    <!--<select name="categoria" id="categoria" onchange="location.href = '/productos/categoria/'+this.value">
-        <option value="-1">Todas las categorias</option>
-        <option th:each="categoria : ${categorias}"
-                th:value="${categoria.id}"
-                th:text="${categoria.nombre}"
-                th:selected="${categoria.id == selectedCategoriaId}">
-        </option>
-    </select>-->
 
+<header><h2>ANUNCIOS</h2></header>
+
+<main>
     <div id="anuncios">
         <p th:if="${#lists.isEmpty(anuncios)}">No hay anuncios.</p>
         <h1>Lista de anuncios</h1>
         <ul>
             <li th:each="anuncio: ${anuncios}">
-                <img th:src="@{'imagesAnuncios/' + ${anuncio.getPrimeraFoto().getNombre()}}" class="w-50 mt-5 rounded-4">
-                <a th:text="${anuncio.titulo}" th:href="'/anuncios/ver/' + ${anuncio.id}"></a> <br>
-                <a th:text="${anuncio.precio} + '€'"></a>
-                <a th:text="${anuncio.fechaCreacion}"></a>
-            </li>
+                <!-- Imagen del anuncio con tamaño consistente -->
+                <img th:src="@{'/imagesAnuncios/' + ${anuncio.getPrimeraFoto().getNombre()}}" class="w-50 mt-5 rounded-4">
 
+                <!-- Título del anuncio con enlace a su detalle -->
+                <h3><a th:text="${anuncio.titulo}" th:href="'/anuncios/ver/' + ${anuncio.id}"></a></h3>
+
+                <!-- Precio del anuncio -->
+                <p th:text="${anuncio.precio} + '€'"></p>
+
+                <!-- Fecha de creación del anuncio -->
+                <p th:text="${anuncio.fechaCreacion}"></p>
+            </li>
         </ul>
     </div>
     <p>Total de artículos: <span th:text="${totalAnuncios}"></span></p>
 </main>
+
 </body>
 </html>

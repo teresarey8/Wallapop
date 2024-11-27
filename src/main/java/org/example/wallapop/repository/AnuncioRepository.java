@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface AnuncioRepository extends JpaRepository<Anuncio, Long> {
     List<Anuncio> findAllByOrderByFechaCreacionDesc();
-    //List<Anuncio> findByUsuario(Usuario usuario);
+    List<Anuncio> findByUsuarioEmail(String email);
 }
