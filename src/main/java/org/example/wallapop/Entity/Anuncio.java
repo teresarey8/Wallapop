@@ -60,7 +60,8 @@ public class Anuncio {
             joinColumns = @JoinColumn(name = "anuncio_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
-
+    //lo he hecho con set que es otro tipo de coleccion, para evitar la repeticion de elementos y que no necesitan orden especifico
+    // si las tuviera que haber ordenado por orden alfabetico por ejemplo, usaria una lista, pero no me hace falta.
     private Set<Categoria> categorias;
 }
 
