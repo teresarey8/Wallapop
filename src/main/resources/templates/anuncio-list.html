@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-md-4" th:each="anuncio : ${anuncios}">
                     <div class="card my-3">
-                        <img th:src="@{'/imagesAnuncios/' + ${anuncio.getPrimeraFoto().getNombre()}}" class="card-img-top" alt="Imagen del anuncio">
+                        <img th:src="@{'/imagesAnuncios/' + ${anuncio.getPrimeraFoto().getNombre()}}" class="card-img-top" alt="se rompio la imagen">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${anuncio.titulo}"></h5>
                             <p class="card-text" th:text="${anuncio.precio} + '€'"></p>

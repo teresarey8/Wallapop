@@ -92,8 +92,10 @@ public class AnuncioController {
             anuncio.setUsuario(usuario);
             if (categoriasIds != null && !categoriasIds.isEmpty()) {
                 List<Categoria> categorias = categoriaRepository.findAllById(categoriasIds);
+                //solo me funcionaba con set, no se porque
                 anuncio.setCategorias(new HashSet<>(categorias)); // Convertimos la lista en un Set
             }
+
             // Guardar las fotos asociadas al anuncio
             fotoService.guardarFotos(fotos, anuncio);
 
@@ -111,6 +113,7 @@ public class AnuncioController {
     @GetMapping("/anuncios/ver/{id}")
     public String verAnuncio(@PathVariable Long id, Model model) {
         Optional<Anuncio> anuncio = anuncioService.findAnuncioById(id);
+        Optional<Usuario> usuario = usuarioService.buscarPorEmail(anuncio.get().getUsuario().getEmail());
         if (anuncio.isPresent()) {
             model.addAttribute("anuncio", anuncio.get());
             model.addAttribute("fotos", anuncio.get().getFotos());
