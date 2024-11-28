@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -98,13 +101,25 @@ public class FotoService {
 
     public void guardarArchivo(MultipartFile file, String nuevoNombreFoto) {
         Path ruta = Paths.get(UPLOADS_DIRECTORY + File.separator + nuevoNombreFoto);
-        //Movemos el archivo a la carpeta y guardamos su nombre en el objeto catgoría
+
         try {
-            byte[] contenido = file.getBytes();
-            Files.write(ruta, contenido);
-        } catch (
-                IOException e) {
-            throw new RuntimeException("Error al guardar archivo", e);
+            // Redimensionar imagen antes de guardarla
+            BufferedImage originalImage = ImageIO.read(file.getInputStream());
+            int width = 1000;
+            int height = (originalImage.getHeight() * width) / originalImage.getWidth();
+
+            Image resizedImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            BufferedImage resizedBufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+            Graphics2D g2d = resizedBufferedImage.createGraphics();
+            g2d.drawImage(resizedImage, 0, 0, null);
+            g2d.dispose();
+
+            // Guardar imagen redimensionada
+            ImageIO.write(resizedBufferedImage, "jpg", ruta.toFile());
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error al guardar archivo redimensionado", e);
         }
     }
 

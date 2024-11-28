@@ -60,6 +60,7 @@ public class Anuncio {
             joinColumns = @JoinColumn(name = "anuncio_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
+
     private Set<Categoria> categorias;
 }
 
